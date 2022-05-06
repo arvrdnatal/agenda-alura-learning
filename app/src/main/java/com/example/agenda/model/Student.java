@@ -1,14 +1,26 @@
 package com.example.agenda.model;
 
-import java.io.Serializable;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+@Entity
 public class Student implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
-    private String phone;
+//    private String lastname;
+    private long phone;
     private String email;
+    private Calendar createdOn = Calendar.getInstance();
 
-    public Student(String name, String phone, String email) {
+    @Ignore
+    public Student(String name, long phone, String email) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -17,11 +29,15 @@ public class Student implements Serializable {
     public Student() {
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getPhone() {
+    public long getPhone() {
         return phone;
     }
 
@@ -29,8 +45,8 @@ public class Student implements Serializable {
         return email;
     }
 
-    public int getId() {
-        return id;
+    public Calendar getCreatedOn() {
+        return createdOn;
     }
 
     public void setId(int id) {
@@ -41,7 +57,7 @@ public class Student implements Serializable {
         this.name = name;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(long phone) {
         this.phone = phone;
     }
 
@@ -49,7 +65,21 @@ public class Student implements Serializable {
         this.email = email;
     }
 
+    public void setCreatedOn(Calendar createdOn) {
+        this.createdOn = createdOn;
+    }
+
     public boolean hasValidId() {
         return id > 0;
+    }
+
+    public String getFullName() {
+//        return name + " " + lastname;
+        return name;
+    }
+
+    public String getCreationDateString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return formatter.format(createdOn.getTime());
     }
 }

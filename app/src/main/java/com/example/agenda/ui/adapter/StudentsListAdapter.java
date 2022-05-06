@@ -10,17 +10,15 @@ import android.widget.TextView;
 import com.example.agenda.R;
 import com.example.agenda.model.Student;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class StudentsListAdapter extends BaseAdapter {
     private final Context context;
     private List<Student> students;
 
-    public StudentsListAdapter(Context context, Map<Integer, Student> students) {
+    public StudentsListAdapter(Context context, List<Student> students) {
         this.context = context;
-        this.students = new ArrayList<>(students.values());
+        this.students = students;
     }
 
     @Override
@@ -55,8 +53,9 @@ public class StudentsListAdapter extends BaseAdapter {
 
         Student student = students.get(position);
         if (student != null) {
-            name.setText(student.getName());
-            phone.setText(student.getPhone());
+            String nameAndCreationDate = student.getFullName() + " - " + student.getCreationDateString();
+            name.setText(nameAndCreationDate);
+            phone.setText(String.valueOf(student.getPhone()));
             email.setText(student.getEmail());
         }
 
@@ -67,13 +66,9 @@ public class StudentsListAdapter extends BaseAdapter {
         students.clear();
     }
 
-    private void addAll(Map<Integer, Student> allStudents) {
-        students = new ArrayList<>(allStudents.values());
-    }
-
-    public void update(Map<Integer, Student> allStudents) {
+    public void update(List<Student> allStudents) {
         clear();
-        addAll(allStudents);
+        students = allStudents;
         notifyDataSetChanged();
     }
 

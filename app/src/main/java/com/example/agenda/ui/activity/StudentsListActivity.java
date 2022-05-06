@@ -17,12 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
 import com.example.agenda.dao.StudentDAO;
+import com.example.agenda.database.AgendaDatabase;
 import com.example.agenda.model.Student;
 import com.example.agenda.ui.adapter.StudentsListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class StudentsListActivity extends AppCompatActivity {
-    private final StudentDAO dao = new StudentDAO();
+    private StudentDAO dao;
     private StudentsListAdapter adapter;
     private Student studentSelected;
 
@@ -32,6 +33,7 @@ public class StudentsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_students_list);
         setTitle(STUDENTS_LIST_TITLE);
 
+        dao = AgendaDatabase.getInstance(this).getStudentDAO();
         adapter = new StudentsListAdapter(this, dao.getAll());
         configButtonAddStudent();
         configListStudents();

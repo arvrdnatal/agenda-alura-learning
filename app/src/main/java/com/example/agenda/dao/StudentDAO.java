@@ -1,31 +1,26 @@
 package com.example.agenda.dao;
 
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
 import com.example.agenda.model.Student;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class StudentDAO {
-    private final static Map<Integer, Student> students = new HashMap<>();
-    private static int counterIds = 1;
+@Dao
+public interface StudentDAO {
+    @Insert
+    void save(Student student);
 
-    public void save(Student student) {
-        student.setId(counterIds);
-        students.put(counterIds, student);
-        counterIds++;
-    }
+    @Query("SELECT * FROM Student")
+    List<Student> getAll();
 
-    public void edit(Student student) {
-        if (students.containsKey(student.getId())) {
-            students.put(student.getId(), student);
-        }
-    }
+    @Delete
+    void remove(Student student);
 
-    public Map<Integer, Student> getAll() {
-        return new HashMap<>(students);
-    }
-
-    public void remove(Student student) {
-        students.remove(student.getId());
-    }
+    @Update
+    void edit(Student student);
 }

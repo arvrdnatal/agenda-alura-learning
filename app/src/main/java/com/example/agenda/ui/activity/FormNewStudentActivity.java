@@ -15,12 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
 import com.example.agenda.dao.StudentDAO;
+import com.example.agenda.database.AgendaDatabase;
 import com.example.agenda.model.Student;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class FormNewStudentActivity extends AppCompatActivity {
-    private final StudentDAO dao = new StudentDAO();
+    private StudentDAO dao;
     private EditText nameField;
+//    private EditText lastnameField;
     private EditText phoneField;
     private EditText emailField;
     private Student student;
@@ -30,6 +32,7 @@ public class FormNewStudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_new_student);
 
+        dao = AgendaDatabase.getInstance(this).getStudentDAO();
         initializeForm();
         setValues();
     }
@@ -42,7 +45,8 @@ public class FormNewStudentActivity extends AppCompatActivity {
             student = (Student) prevIntent.getSerializableExtra(STUDENT_KEY);
             if (student != null) {
                 nameField.setText(student.getName());
-                phoneField.setText(student.getPhone());
+//                lastnameField.setText(student.getLastname());
+                phoneField.setText(String.valueOf(student.getPhone()));
                 emailField.setText(student.getEmail());
             }
         } else {
@@ -53,6 +57,7 @@ public class FormNewStudentActivity extends AppCompatActivity {
 
     private void initializeForm() {
         nameField = ((TextInputLayout) findViewById(R.id.input_name)).getEditText();
+//        lastnameField = ((TextInputLayout) findViewById(R.id.input_lastname)).getEditText();
         phoneField = ((TextInputLayout) findViewById(R.id.input_phone)).getEditText();
         emailField = ((TextInputLayout) findViewById(R.id.input_email)).getEditText();
     }
@@ -67,7 +72,8 @@ public class FormNewStudentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_save_student) {
             student.setName(nameField.getText().toString());
-            student.setPhone(phoneField.getText().toString());
+//            student.setLastname(lastnameField.getText().toString());
+            student.setPhone(Long.parseLong(phoneField.getText().toString()));
             student.setEmail(emailField.getText().toString());
 
             if (student.hasValidId()) dao.edit(student);

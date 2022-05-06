@@ -5,4 +5,5 @@ public interface ConstantsActivities {
     String STUDENTS_LIST_TITLE = "Lista de Alunos";
     String FORM_NEW_STUDENT_ADD_TITLE = "Adicionar Aluno";
     String FORM_NEW_STUDENT_EDIT_TITLE = "Editar Aluno";
+    String DATABASE_NAME = "agenda.db";
 }
