@@ -14,15 +14,12 @@ public class Student implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id = 0;
     private String name;
-//    private String lastname;
-    private long phone;
     private String email;
     private Calendar createdOn = Calendar.getInstance();
 
     @Ignore
-    public Student(String name, long phone, String email) {
+    public Student(String name, String email) {
         this.name = name;
-        this.phone = phone;
         this.email = email;
     }
 
@@ -35,10 +32,6 @@ public class Student implements Serializable {
 
     public String getName() {
         return name;
-    }
-
-    public long getPhone() {
-        return phone;
     }
 
     public String getEmail() {
@@ -57,10 +50,6 @@ public class Student implements Serializable {
         this.name = name;
     }
 
-    public void setPhone(long phone) {
-        this.phone = phone;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -74,7 +63,6 @@ public class Student implements Serializable {
     }
 
     public String getFullName() {
-//        return name + " " + lastname;
         return name;
     }
 

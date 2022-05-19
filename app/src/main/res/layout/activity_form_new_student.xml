@@ -28,24 +28,24 @@
                 tools:ignore="TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/input_lastname"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_margin="10dp">-->
+        <!--        <com.google.android.material.textfield.TextInputLayout-->
+        <!--            android:id="@+id/input_lastname"-->
+        <!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_margin="10dp">-->
 
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/edit_text_lastname"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="@string/sobrenome"-->
-<!--                android:inputType="text"-->
-<!--                tools:ignore="TextContrastCheck" />-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
+        <!--            <com.google.android.material.textfield.TextInputEditText-->
+        <!--                android:id="@+id/edit_text_lastname"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:hint="@string/sobrenome"-->
+        <!--                android:inputType="text"-->
+        <!--                tools:ignore="TextContrastCheck" />-->
+        <!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_phone"
+            android:id="@+id/input_cellphone"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,6 +56,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/telefone"
+                android:inputType="phone"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_telephone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/telefone_fixo"
                 android:inputType="phone"
                 tools:ignore="TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>

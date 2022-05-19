@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface StudentDAO {
     @Insert
-    void save(Student student);
+    Long save(Student student);
 
     @Query("SELECT * FROM Student")
     List<Student> getAll();
@@ -22,5 +22,5 @@ public interface StudentDAO {
     void remove(Student student);
 
     @Update
-    void edit(Student student);
+    void update(Student student);
 }

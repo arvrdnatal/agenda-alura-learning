@@ -8,17 +8,19 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.agenda.R;
+import com.example.agenda.asynctask.ChangePhoneFieldStudentsListTask;
 import com.example.agenda.model.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentsListAdapter extends BaseAdapter {
     private final Context context;
     private List<Student> students;
 
-    public StudentsListAdapter(Context context, List<Student> students) {
+    public StudentsListAdapter(Context context) {
         this.context = context;
-        this.students = students;
+        this.students = new ArrayList<>();
     }
 
     @Override
@@ -48,14 +50,14 @@ public class StudentsListAdapter extends BaseAdapter {
         }
 
         TextView name = view.findViewById(R.id.text_name);
-        TextView phone = view.findViewById(R.id.text_phone);
+        final TextView phone = view.findViewById(R.id.text_phone);
         TextView email = view.findViewById(R.id.text_email);
 
         Student student = students.get(position);
         if (student != null) {
             String nameAndCreationDate = student.getFullName() + " - " + student.getCreationDateString();
             name.setText(nameAndCreationDate);
-            phone.setText(String.valueOf(student.getPhone()));
+            new ChangePhoneFieldStudentsListTask(context, student, (phoneFound) -> phone.setText(String.valueOf(phoneFound.getNumber()))).run();
             email.setText(student.getEmail());
         }
 

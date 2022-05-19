@@ -16,6 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
+import com.example.agenda.asynctask.RemoveStudentTask;
+import com.example.agenda.asynctask.SearchStudentTask;
 import com.example.agenda.dao.StudentDAO;
 import com.example.agenda.database.AgendaDatabase;
 import com.example.agenda.model.Student;
@@ -34,7 +36,8 @@ public class StudentsListActivity extends AppCompatActivity {
         setTitle(STUDENTS_LIST_TITLE);
 
         dao = AgendaDatabase.getInstance(this).getStudentDAO();
-        adapter = new StudentsListAdapter(this, dao.getAll());
+        adapter = new StudentsListAdapter(this);
+        new SearchStudentTask(dao, adapter).initialRun();
         configButtonAddStudent();
         configListStudents();
     }
@@ -53,7 +56,7 @@ public class StudentsListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.update(dao.getAll());
+        new SearchStudentTask(dao, adapter).run();
     }
 
     @Override
@@ -69,10 +72,8 @@ public class StudentsListActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.menu_remove_student) {
             new AlertDialog.Builder(this).setTitle("Atenção")
                     .setMessage("Tem certeza que quer remover o aluno?")
-                    .setPositiveButton("Sim", (dialogInterface, i) -> {
-                        dao.remove(studentSelected);
-                        adapter.remove(studentSelected);
-                    }).setNegativeButton("Não", null).show();
+                    .setPositiveButton("Sim", (dialogInterface, i) -> new RemoveStudentTask(dao, adapter, studentSelected).run())
+                    .setNegativeButton("Não", null).show();
         } else if (item.getItemId() == R.id.menu_edit_student) {
             Intent goToForm = new Intent(StudentsListActivity.this, FormNewStudentActivity.class);
             goToForm.putExtra(STUDENT_KEY, studentSelected);

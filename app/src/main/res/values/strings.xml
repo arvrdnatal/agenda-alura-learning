@@ -7,5 +7,6 @@
     <string name="salvar_aluno">Salvar Aluno</string>
     <string name="remover">Remover</string>
     <string name="editar">Editar</string>
-<!--    <string name="sobrenome">Sobrenome</string>-->
+    <string name="telefone_fixo">Telefone Fixo</string>
+    <!--    <string name="sobrenome">Sobrenome</string>-->
 </resources>

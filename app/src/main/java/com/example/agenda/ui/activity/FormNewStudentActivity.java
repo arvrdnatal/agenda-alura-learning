@@ -14,25 +14,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.agenda.R;
+import com.example.agenda.asynctask.SaveStudentTask;
+import com.example.agenda.asynctask.SearchAllStudentPhones;
+import com.example.agenda.dao.PhoneDAO;
 import com.example.agenda.dao.StudentDAO;
 import com.example.agenda.database.AgendaDatabase;
+import com.example.agenda.model.Phone;
+import com.example.agenda.model.PhoneType;
 import com.example.agenda.model.Student;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.List;
+
 public class FormNewStudentActivity extends AppCompatActivity {
-    private StudentDAO dao;
+    private StudentDAO studentDAO;
     private EditText nameField;
-//    private EditText lastnameField;
-    private EditText phoneField;
+    private EditText cellphoneField;
+    private EditText telephoneField;
     private EditText emailField;
     private Student student;
+    private PhoneDAO phoneDAO;
+    private List<Phone> studentPhones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_new_student);
 
-        dao = AgendaDatabase.getInstance(this).getStudentDAO();
+        AgendaDatabase database = AgendaDatabase.getInstance(this);
+        studentDAO = database.getStudentDAO();
+        phoneDAO = database.getPhoneDAO();
         initializeForm();
         setValues();
     }
@@ -45,9 +56,14 @@ public class FormNewStudentActivity extends AppCompatActivity {
             student = (Student) prevIntent.getSerializableExtra(STUDENT_KEY);
             if (student != null) {
                 nameField.setText(student.getName());
-//                lastnameField.setText(student.getLastname());
-                phoneField.setText(String.valueOf(student.getPhone()));
                 emailField.setText(student.getEmail());
+                new SearchAllStudentPhones(this, phoneDAO, student, (phones) -> {
+                    studentPhones = phones;
+                    for (Phone phone : phones) {
+                        if (phone.getType() == PhoneType.TELEPHONE) telephoneField.setText(String.valueOf(phone.getNumber()));
+                        else cellphoneField.setText(String.valueOf(phone.getNumber()));
+                    }
+                }).run();
             }
         } else {
             setTitle(FORM_NEW_STUDENT_ADD_TITLE);
@@ -57,8 +73,8 @@ public class FormNewStudentActivity extends AppCompatActivity {
 
     private void initializeForm() {
         nameField = ((TextInputLayout) findViewById(R.id.input_name)).getEditText();
-//        lastnameField = ((TextInputLayout) findViewById(R.id.input_lastname)).getEditText();
-        phoneField = ((TextInputLayout) findViewById(R.id.input_phone)).getEditText();
+        cellphoneField = ((TextInputLayout) findViewById(R.id.input_cellphone)).getEditText();
+        telephoneField = ((TextInputLayout) findViewById(R.id.input_telephone)).getEditText();
         emailField = ((TextInputLayout) findViewById(R.id.input_email)).getEditText();
     }
 
@@ -71,15 +87,16 @@ public class FormNewStudentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_save_student) {
+            String telephoneFieldText = !telephoneField.getText().toString().equals("") ? telephoneField.getText().toString() : "0";
+            String cellphoneFieldText = !cellphoneField.getText().toString().equals("") ? cellphoneField.getText().toString() : "0";
             student.setName(nameField.getText().toString());
-//            student.setLastname(lastnameField.getText().toString());
-            student.setPhone(Long.parseLong(phoneField.getText().toString()));
             student.setEmail(emailField.getText().toString());
 
-            if (student.hasValidId()) dao.edit(student);
-            else dao.save(student);
-
-            finish();
+            if (student.hasValidId()) {
+                new SaveStudentTask(this, studentDAO, phoneDAO, student, telephoneFieldText, cellphoneFieldText, studentPhones, this::finish).runEdit();
+            } else {
+                new SaveStudentTask(this, studentDAO, phoneDAO, student, telephoneFieldText, cellphoneFieldText, studentPhones, this::finish).runSaveFromZero();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
